@@ -203,3 +203,15 @@ export const teamService = {
     return response.data;
   },
 };
+
+export const settingsService = {
+  get: async () => {
+    const response = await api.get('/settings');
+    return response.data;
+  },
+
+  update: async (settingsData) => {
+    const response = await api.put('/settings', settingsData);
+    return response.data;
+  },
+};

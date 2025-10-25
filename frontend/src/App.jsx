@@ -14,6 +14,7 @@ import NewsAdmin from './pages/admin/News';
 import MessagesAdmin from './pages/admin/Messages';
 import UsersAdmin from './pages/admin/Users';
 import TeamAdmin from './pages/admin/Team';
+import SettingsAdmin from './pages/admin/Settings';
 
 // Componente de ruta protegida
 import ProtectedRoute from './components/ProtectedRoute';
@@ -74,6 +75,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <UsersAdmin />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/settings" 
+            element={
+              <ProtectedRoute>
+                <SettingsAdmin />
               </ProtectedRoute>
             } 
           />
