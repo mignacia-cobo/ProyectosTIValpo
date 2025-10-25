@@ -4,6 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 // Páginas públicas
 import Home from './pages/Home';
+import NewsDetail from './pages/NewsDetail';
 
 // Páginas de administración
 import Login from './pages/admin/Login';
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           {/* Rutas públicas */}
           <Route path="/" element={<Home />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
           
           {/* Rutas de administración */}
           <Route path="/admin/login" element={<Login />} />

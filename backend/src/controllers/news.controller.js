@@ -33,17 +33,30 @@ const getAllNewsAdmin = async (req, res) => {
   }
 };
 
-// Obtener noticia por ID
+// Obtener noticia por ID con galería de imágenes
 const getNewsById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await db.query('SELECT * FROM news WHERE id = $1', [id]);
     
-    if (result.rows.length === 0) {
+    // Obtener la noticia
+    const newsResult = await db.query('SELECT * FROM news WHERE id = $1', [id]);
+    
+    if (newsResult.rows.length === 0) {
       return res.status(404).json({ error: 'Noticia no encontrada' });
     }
     
-    res.json(result.rows[0]);
+    const news = newsResult.rows[0];
+    
+    // Obtener las imágenes de la galería
+    const imagesResult = await db.query(
+      'SELECT * FROM news_images WHERE news_id = $1 ORDER BY order_index ASC',
+      [id]
+    );
+    
+    // Agregar las imágenes a la noticia
+    news.gallery = imagesResult.rows;
+    
+    res.json(news);
   } catch (error) {
     console.error('Error al obtener noticia:', error);
     res.status(500).json({ error: 'Error al obtener noticia' });
