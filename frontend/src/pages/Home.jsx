@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import { FaRocket, FaLightbulb, FaCogs, FaCode, FaUsers, FaTrophy, FaArrowDown } from 'react-icons/fa';
+import { FaRocket, FaLightbulb, FaCogs, FaCode, FaUsers, FaTrophy, FaArrowDown, FaChartLine, FaAward, FaStar } from 'react-icons/fa';
+import CountUp from 'react-countup';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import ProjectCard from '../components/ProjectCard';
@@ -76,99 +77,141 @@ const Home = () => {
     <div className="min-h-screen overflow-x-hidden">
       <Navbar />
 
-      {/* Hero Section - Más compacto */}
+      {/* Hero Section - Rediseñado */}
       <section 
         id="inicio" 
-        className="relative pt-20 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 text-white overflow-hidden"
+        className="relative pt-20 min-h-screen flex items-center bg-gradient-to-br from-primary-600 via-primary-700 to-purple-900 text-white overflow-hidden"
       >
-        {/* Patrón de fondo animado - Solo dentro del hero */}
-        <div className="absolute inset-0 opacity-10 overflow-hidden">
-          <div className="absolute top-10 left-10 w-64 h-64 bg-white rounded-full mix-blend-multiply filter blur-xl animate-float" style={{ top: '10%' }}></div>
-          <div className="absolute top-20 right-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl animate-float animation-delay-200" style={{ top: '20%' }}></div>
-          <div className="absolute top-32 left-1/3 w-60 h-60 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl animate-float animation-delay-400" style={{ top: '15%' }}></div>
+        {/* Patrón de fondo animado mejorado */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute top-1/4 left-10 w-72 h-72 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl animate-float"></div>
+          <div className="absolute top-1/3 right-10 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl animate-float animation-delay-200"></div>
+          <div className="absolute bottom-1/4 left-1/3 w-80 h-80 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl animate-float animation-delay-400"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+        {/* Grid pattern decorativo */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
-            {/* Badge */}
-            <div className="inline-block mb-4 animate-fade-in">
-              <span className="px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-sm font-semibold border border-white/30">
-                ✨ Innovación Tecnológica desde Valparaíso
+            {/* Badge animado */}
+            <div className="inline-block mb-6 animate-fade-in">
+              <span className="px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md text-sm font-semibold border border-white/20 shadow-lg inline-flex items-center gap-2">
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                Innovación Tecnológica desde Valparaíso
               </span>
             </div>
 
-            {/* Título principal más pequeño */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 animate-fade-in-up">
-              <span className="block">Proyectos TI</span>
-              <span className="block bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
+            {/* Título principal mejorado */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 animate-fade-in-up leading-tight">
+              <span className="block mb-2">Proyectos TI</span>
+              <span className="block bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-lg">
                 Valparaíso
               </span>
             </h1>
 
-            {/* Subtítulo más compacto */}
-            <p className="text-lg md:text-xl mb-6 text-primary-100 max-w-2xl mx-auto animate-fade-in-up animation-delay-200">
-              Desarrollamos y mantenemos soluciones tecnológicas innovadoras
+            {/* Subtítulo mejorado */}
+            <p className="text-xl md:text-2xl mb-8 text-primary-50 max-w-3xl mx-auto animate-fade-in-up animation-delay-200 leading-relaxed">
+              Desarrollamos soluciones tecnológicas innovadoras que transforman ideas en realidad digital
             </p>
 
-            {/* Botones de acción */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-300">
+            {/* Botones de acción mejorados */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-300 mb-12">
               <a 
                 href="#proyectos" 
-                className="inline-flex items-center gap-2 bg-white text-primary-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all shadow-lg hover-lift"
+                className="group inline-flex items-center gap-3 bg-white text-primary-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all shadow-2xl hover-lift transform hover:scale-105"
               >
-                <FaRocket className="text-lg" />
+                <FaRocket className="text-xl group-hover:rotate-12 transition-transform" />
                 Ver Proyectos
               </a>
               <a 
                 href="#contacto" 
-                className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-all"
+                className="group inline-flex items-center gap-3 bg-transparent border-2 border-white/30 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-bold hover:bg-white/10 hover:border-white transition-all"
               >
                 Contáctanos
+                <span className="group-hover:translate-x-1 transition-transform">→</span>
               </a>
             </div>
 
-            {/* Indicador de scroll más cerca */}
-            <div className="mt-10 animate-bounce">
-              <FaArrowDown className="mx-auto text-xl text-white/70" />
+            {/* Tecnologías destacadas */}
+            <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up animation-delay-400">
+              {['React', 'Node.js', 'PostgreSQL', 'Docker'].map((tech, index) => (
+                <span key={tech} className="px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg text-sm font-medium">
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            {/* Indicador de scroll animado */}
+            <div className="mt-16 animate-bounce">
+              <div className="inline-flex flex-col items-center gap-2">
+                <span className="text-sm text-white/70 font-medium">Descubre más</span>
+                <FaArrowDown className="text-2xl text-white/70" />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Wave divider */}
+        {/* Wave divider mejorado */}
         <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0,40L48,45C96,50,192,60,288,56C384,52,480,36,576,32C672,28,768,36,864,40C960,44,1056,44,1152,40C1248,36,1344,28,1392,24L1440,20L1440,80L1392,80C1344,80,1248,80,1152,80C1056,80,960,80,864,80C768,80,672,80,576,80C480,80,384,80,288,80C192,80,96,80,48,80L0,80Z" fill="white"/>
+          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+            <path d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z" fill="white"/>
           </svg>
         </div>
       </section>
 
-      {/* Stats Section - Nueva sección de estadísticas */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Stats Section - Mejorado con animaciones */}
+      <section className="py-20 bg-gradient-to-r from-primary-50 to-purple-50 relative overflow-hidden">
+        {/* Patrón de fondo decorativo */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-primary-400 rounded-full filter blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-400 rounded-full filter blur-3xl"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center card-reveal p-6">
-              <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
-                {projects.length}+
+            {/* Stat 1 */}
+            <div className="text-center card-reveal">
+              <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                <FaRocket className="text-4xl text-primary-600" />
               </div>
-              <div className="text-gray-600 font-medium">Proyectos Activos</div>
+              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                <CountUp end={projects.length || 5} duration={2.5} />+
+              </div>
+              <div className="text-gray-700 font-semibold text-lg">Proyectos Activos</div>
             </div>
-            <div className="text-center card-reveal p-6 animation-delay-100">
-              <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
-                100%
+
+            {/* Stat 2 */}
+            <div className="text-center card-reveal animation-delay-100">
+              <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                <FaUsers className="text-4xl text-purple-600" />
               </div>
-              <div className="text-gray-600 font-medium">Código Abierto</div>
+              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                <CountUp end={150} duration={2.5} />+
+              </div>
+              <div className="text-gray-700 font-semibold text-lg">Usuarios Activos</div>
             </div>
-            <div className="text-center card-reveal p-6 animation-delay-200">
-              <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
-                24/7
+
+            {/* Stat 3 */}
+            <div className="text-center card-reveal animation-delay-200">
+              <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                <FaAward className="text-4xl text-blue-600" />
               </div>
-              <div className="text-gray-600 font-medium">Disponibilidad</div>
+              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+                <CountUp end={99} duration={2.5} />%
+              </div>
+              <div className="text-gray-700 font-semibold text-lg">Satisfacción</div>
             </div>
-            <div className="text-center card-reveal p-6 animation-delay-300">
-              <div className="text-4xl md:text-5xl font-bold text-primary-600 mb-2">
-                ∞
+
+            {/* Stat 4 */}
+            <div className="text-center card-reveal animation-delay-300">
+              <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                <FaStar className="text-4xl text-yellow-500" />
               </div>
-              <div className="text-gray-600 font-medium">Innovación</div>
+              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent mb-2">
+                <CountUp end={24} duration={2.5} />/7
+              </div>
+              <div className="text-gray-700 font-semibold text-lg">Disponibilidad</div>
             </div>
           </div>
         </div>
