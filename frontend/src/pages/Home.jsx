@@ -26,6 +26,15 @@ const Home = () => {
     
     window.addEventListener('scroll', handleScroll);
     
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Intersection Observer separado - se ejecuta cuando cambian projects/news
+  useEffect(() => {
+    if (loading) return; // No ejecutar hasta que termine de cargar
+    
     // Intersection Observer para animaciones al entrar en viewport
     const observerOptions = {
       threshold: 0.1,
@@ -44,10 +53,9 @@ const Home = () => {
     elementsToObserve.forEach(el => observer.observe(el));
     
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
     };
-  }, []);
+  }, [loading, projects, news]); // Re-ejecutar cuando cambien los datos
 
   const loadData = async () => {
     try {
@@ -63,11 +71,6 @@ const Home = () => {
       setLoading(false);
     }
   };
-
-  // Cargar datos al montar el componente
-  useEffect(() => {
-    loadData();
-  }, []);
 
   return (
     <div className="min-h-screen overflow-x-hidden">

@@ -1,11 +1,10 @@
 const { Pool } = require('pg');
 
+// Connection string with explicit client encoding to avoid Windows codepage issues
+const connectionString = `postgresql://${process.env.DB_USER || 'postgres'}:${process.env.DB_PASSWORD || 'postgres'}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 5432}/${process.env.DB_NAME || 'proyectosti'}?client_encoding=UTF8`;
+
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD || 'postgres',
-  database: process.env.DB_NAME || 'proyectosti',
+  connectionString,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
@@ -18,7 +17,7 @@ pool.on('connect', () => {
 
 pool.on('error', (err) => {
   console.error('❌ Error inesperado en la base de datos:', err);
-  process.exit(-1);
+  // process.exit(-1); // Comentado temporalmente para debugging
 });
 
 module.exports = {

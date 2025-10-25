@@ -18,9 +18,9 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-// CORS
+// CORS - Permitir localhost en desarrollo
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
+  origin: ['http://localhost:3000', 'http://localhost:5173', process.env.FRONTEND_URL].filter(Boolean),
   credentials: true
 }));
 
