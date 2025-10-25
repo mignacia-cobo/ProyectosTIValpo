@@ -369,14 +369,22 @@ const Home = () => {
       </section>
 
       {/* News Section - Mejorado */}
-      <section id="noticias" className="py-20 bg-white" ref={newsRef}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="noticias" className="py-20 bg-gradient-to-br from-gray-50 to-white relative overflow-hidden" ref={newsRef}>
+        {/* Decoración de fondo */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-20 right-10 w-72 h-72 bg-purple-500 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-10 w-96 h-96 bg-primary-500 rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <span className="card-reveal inline-block px-4 py-2 bg-green-100 text-green-600 rounded-full text-sm font-semibold mb-4">
-              ACTUALIDAD
+            <span className="card-reveal inline-block px-4 py-2 bg-primary-50 text-primary-700 rounded-full text-sm font-semibold mb-4 animate-fade-in">
+              📰 ACTUALIDAD
             </span>
-            <h2 className="card-reveal animation-delay-100 text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Últimas Novedades
+            <h2 className="card-reveal animation-delay-100 text-4xl md:text-5xl font-bold mb-6">
+              <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
+                Últimas Novedades
+              </span>
             </h2>
             <p className="card-reveal animation-delay-200 text-xl text-gray-600 max-w-2xl mx-auto">
               Mantente informado sobre nuestras actualizaciones, lanzamientos y noticias relevantes
@@ -410,8 +418,8 @@ const Home = () => {
             </div>
           ) : (
             <div className="text-center py-12 card-reveal">
-              <div className="inline-block p-6 bg-gray-100 rounded-full mb-4">
-                <FaLightbulb className="text-gray-400 text-5xl" />
+              <div className="inline-block p-6 bg-gradient-to-br from-primary-50 to-purple-50 rounded-full mb-4">
+                <FaLightbulb className="text-primary-600 text-5xl" />
               </div>
               <p className="text-gray-600 text-lg">No hay noticias disponibles en este momento.</p>
               <p className="text-gray-500 text-sm mt-2">Mantente atento a nuestras próximas actualizaciones.</p>

@@ -29,7 +29,7 @@ const NewsCard = ({ news }) => {
       onKeyPress={(e) => e.key === 'Enter' && handleClick()}
     >
       {/* Imagen con overlay mejorado */}
-      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-green-500 to-blue-600">
+      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-primary-500 to-purple-600">
         <img 
           src={imageUrl} 
           alt={news.title}
@@ -46,7 +46,7 @@ const NewsCard = ({ news }) => {
         <div className="absolute top-4 left-4">
           <div className="bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-lg">
             <div className="flex items-center gap-2 text-gray-700">
-              <FaCalendar className="text-xs text-green-600" />
+              <FaCalendar className="text-xs text-primary-600" />
               <span className="text-xs font-bold">{formatDate(news.published_date)}</span>
             </div>
           </div>
@@ -54,7 +54,7 @@ const NewsCard = ({ news }) => {
 
         {/* Icono decorativo */}
         <div className="absolute top-4 right-4">
-          <div className="bg-green-500/90 backdrop-blur-sm p-2.5 rounded-full shadow-lg">
+          <div className="bg-primary-500/90 backdrop-blur-sm p-2.5 rounded-full shadow-lg">
             <FaNewspaper className="text-white text-sm" />
           </div>
         </div>
@@ -63,9 +63,9 @@ const NewsCard = ({ news }) => {
       {/* Contenido mejorado */}
       <div className="p-6 bg-white relative">
         {/* Borde superior decorativo */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 via-purple-500 to-primary-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
         
-        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-green-600 transition-colors duration-300 leading-snug">
+        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-600 transition-colors duration-300 leading-snug">
           {news.title}
         </h3>
         
@@ -74,7 +74,7 @@ const NewsCard = ({ news }) => {
         </p>
 
         {/* Botón mejorado */}
-        <div className="inline-flex items-center gap-2 text-green-600 font-semibold group-hover:gap-3 transition-all duration-300 px-4 py-2 rounded-lg border-2 border-transparent group-hover:border-green-600 group-hover:bg-green-50">
+        <div className="inline-flex items-center gap-2 text-primary-600 font-semibold group-hover:gap-3 transition-all duration-300 px-4 py-2 rounded-lg border-2 border-transparent group-hover:border-primary-600 group-hover:bg-primary-50">
           <span>Leer más</span>
           <FaArrowRight className="text-sm group-hover:translate-x-1 transition-transform duration-300" />
         </div>
