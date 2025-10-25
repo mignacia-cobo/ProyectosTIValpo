@@ -11,6 +11,7 @@ const Projects = () => {
   const [editingProject, setEditingProject] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
+    title: '',
     description: '',
     url: '',
     order_index: 0,
@@ -39,6 +40,7 @@ const Projects = () => {
       setEditingProject(project);
       setFormData({
         name: project.name,
+        title: project.title || '',
         description: project.description,
         url: project.url,
         order_index: project.order_index,
@@ -48,6 +50,7 @@ const Projects = () => {
       setEditingProject(null);
       setFormData({
         name: '',
+        title: '',
         description: '',
         url: '',
         order_index: 0,
@@ -85,6 +88,7 @@ const Projects = () => {
     try {
       const data = new FormData();
       data.append('name', formData.name);
+      data.append('title', formData.title);
       data.append('description', formData.description);
       data.append('url', formData.url);
       data.append('order_index', formData.order_index);
@@ -265,6 +269,19 @@ const Projects = () => {
                     required
                     className="input-field"
                     placeholder="Ej: Sistema de Exámenes"
+                  />
+                </div>
+
+                <div>
+                  <label className="label">Título del Proyecto</label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    required
+                    className="input-field"
+                    placeholder="Ej: Gestión de Exámenes Transversales"
                   />
                 </div>
 
