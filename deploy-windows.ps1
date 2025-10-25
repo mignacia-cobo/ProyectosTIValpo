@@ -10,7 +10,7 @@ Write-Host ""
 
 # Variables del servidor
 $SERVER_IP = "64.176.16.195"
-$SERVER_USER = "root"
+$SERVER_USER = "linuxuser"
 $SERVER_PATH = "/var/www/proyectostivalpo"
 $LOCAL_PATH = $PSScriptRoot
 

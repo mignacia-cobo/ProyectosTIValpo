@@ -60,7 +60,7 @@ sudo ufw --force enable
 
 echo -e "${YELLOW}[4/8] Creando directorio del proyecto...${NC}"
 sudo mkdir -p $PROJECT_DIR
-sudo chown -R $USER:$USER $PROJECT_DIR
+sudo chown -R linuxuser:linuxuser $PROJECT_DIR
 
 echo -e "${YELLOW}[5/8] Configurando variables de entorno...${NC}"
 if [ ! -f "$PROJECT_DIR/.env" ]; then

@@ -4,7 +4,7 @@
 
 - **IP Pública**: 64.176.16.195
 - **Dominio**: proyectostivalpo.com
-- **Usuario**: root (o usuario con permisos sudo)
+- **Usuario**: linuxuser (con permisos sudo)
 
 ## 🔐 Paso 1: Conectarse al Servidor
 
@@ -12,7 +12,7 @@
 
 ```powershell
 # Opción A: Si tienes SSH instalado en Windows
-ssh root@64.176.16.195
+ssh linuxuser@64.176.16.195
 
 # Opción B: Usar PuTTY (descargar de https://www.putty.org/)
 # Host: 64.176.16.195
@@ -45,7 +45,7 @@ scp -r C:\Users\Maria\Documents\GitHub\RAOP_V2_DEV\ProyectosTIValpo root@64.176.
 1. Descargar WinSCP: https://winscp.net/
 2. Conectar:
    - Host: 64.176.16.195
-   - Usuario: root
+   - Usuario: linuxuser
    - Contraseña: J4c#[Ga2.D5oTxMt
 3. Subir la carpeta del proyecto a: `/var/www/proyectostivalpo`
 

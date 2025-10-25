@@ -137,7 +137,7 @@ jobs:
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            "sudo mkdir -p /var/www/proyectostivalpo/backend && sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /var/www/proyectostivalpo"
+            "sudo mkdir -p /var/www/proyectostivalpo/backend /var/www/proyectostivalpo/backend/uploads && sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /var/www/proyectostivalpo"
 
       - name: Crear archivo .env temporal
         run: |

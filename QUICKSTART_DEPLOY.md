@@ -20,15 +20,15 @@ Este script:
 
 ### 1️⃣ Conectarse al servidor:
 ```powershell
-ssh root@64.176.16.195
+ssh linuxuser@64.176.16.195
 # Contraseña: J4c#[Ga2.D5oTxMt
 ```
 
 ### 2️⃣ Subir archivos con WinSCP:
 - Descargar: https://winscp.net/
 - Host: 64.176.16.195
-- Usuario: root
-- Contraseña: J4c#[Ga2.D5oTxMt
+- Usuario: linuxuser
+- Contraseña: `J4c#[Ga2.D5oTxMt`
 - Subir a: /var/www/proyectostivalpo
 
 ### 3️⃣ En el servidor, ejecutar:

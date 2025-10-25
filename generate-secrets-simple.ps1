@@ -34,7 +34,7 @@ $dockerPasswordText = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtim
 
 Write-Host "`n=== SERVIDOR ===" -ForegroundColor Cyan
 $serverHost = "64.176.16.195"
-$serverUser = "root"
+$serverUser = "linuxuser"
 $serverPassword = Read-Host "Contrasena del servidor" -AsSecureString
 $serverPasswordText = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($serverPassword))
 
