@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import ProjectCard from '../components/ProjectCard';
 import NewsCard from '../components/NewsCard';
 import ContactForm from '../components/ContactForm';
+import Team from '../components/Team';
 import { projectService, newsService } from '../services';
 
 const Home = () => {
@@ -418,6 +419,9 @@ const Home = () => {
           )}
         </div>
       </section>
+
+      {/* Team Section */}
+      <Team />
 
       {/* Contact Section - Mejorado */}
       <section id="contacto" className="py-20 bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
