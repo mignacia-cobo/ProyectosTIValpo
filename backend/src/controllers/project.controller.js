@@ -48,18 +48,18 @@ const getProjectById = async (req, res) => {
 // Crear proyecto
 const createProject = async (req, res) => {
   try {
-    const { name, description, url, order_index, active } = req.body;
+    const { name, title, description, url, order_index, active } = req.body;
     
-    if (!name || !description || !url) {
-      return res.status(400).json({ error: 'Nombre, descripción y URL son requeridos' });
+    if (!name || !title || !description || !url) {
+      return res.status(400).json({ error: 'Nombre, título, descripción y URL son requeridos' });
     }
 
     const image_url = req.file ? `/uploads/${req.file.filename}` : null;
 
     const result = await db.query(
-      `INSERT INTO projects (name, description, url, image_url, order_index, active) 
-       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [name, description, url, image_url, order_index || 0, active !== undefined ? active : true]
+      `INSERT INTO projects (name, title, description, url, image_url, order_index, active) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+      [name, title, description, url, image_url, order_index || 0, active !== undefined ? active : true]
     );
 
     res.status(201).json(result.rows[0]);
@@ -73,7 +73,7 @@ const createProject = async (req, res) => {
 const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, url, order_index, active } = req.body;
+    const { name, title, description, url, order_index, active } = req.body;
 
     // Verificar si el proyecto existe
     const existingProject = await db.query('SELECT * FROM projects WHERE id = $1', [id]);
@@ -96,10 +96,10 @@ const updateProject = async (req, res) => {
 
     const result = await db.query(
       `UPDATE projects 
-       SET name = $1, description = $2, url = $3, image_url = $4, 
-           order_index = $5, active = $6, updated_at = NOW()
-       WHERE id = $7 RETURNING *`,
-      [name, description, url, image_url, order_index, active, id]
+       SET name = $1, title = $2, description = $3, url = $4, image_url = $5, 
+           order_index = $6, active = $7, updated_at = NOW()
+       WHERE id = $8 RETURNING *`,
+      [name, title, description, url, image_url, order_index, active, id]
     );
 
     res.json(result.rows[0]);
