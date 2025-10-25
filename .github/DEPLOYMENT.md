@@ -14,5 +14,8 @@
 - DB_PASSWORD: `postgres`
 - Variables de entorno verificadas en GitHub Secrets
 
-### Pendiente:
-- Actualizar secret DB_NAME en GitHub Actions a `readme_to_recover`
+### Completado:
+- ✅ Secrets actualizados en GitHub Actions
+- ✅ DB_NAME configurado como `readme_to_recover`
+- ✅ DB_USER y DB_PASSWORD configurados
+- ✅ SMTP_PORT y ADMIN_EMAIL configurados
