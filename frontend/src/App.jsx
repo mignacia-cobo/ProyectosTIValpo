@@ -12,6 +12,7 @@ import AdminDashboard from './pages/admin/Dashboard';
 import ProjectsAdmin from './pages/admin/Projects';
 import NewsAdmin from './pages/admin/News';
 import MessagesAdmin from './pages/admin/Messages';
+import UsersAdmin from './pages/admin/Users';
 
 // Componente de ruta protegida
 import ProtectedRoute from './components/ProtectedRoute';
@@ -56,6 +57,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <MessagesAdmin />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/users" 
+            element={
+              <ProtectedRoute>
+                <UsersAdmin />
               </ProtectedRoute>
             } 
           />

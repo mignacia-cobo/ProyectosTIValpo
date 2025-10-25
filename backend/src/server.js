@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth.routes');
 const projectRoutes = require('./routes/project.routes');
 const newsRoutes = require('./routes/news.routes');
 const contactRoutes = require('./routes/contact.routes');
+const usersRoutes = require('./routes/users.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -36,6 +37,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/users', usersRoutes);
 
 // Ruta de salud
 app.get('/api/health', (req, res) => {
