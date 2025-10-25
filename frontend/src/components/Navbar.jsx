@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaShieldAlt } from 'react-icons/fa';
 import { useState } from 'react';
 
 const Navbar = () => {
@@ -32,9 +32,10 @@ const Navbar = () => {
             </a>
             <Link 
               to="/admin" 
-              className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition"
+              className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2"
+              title="Administración"
             >
-              Admin
+              <FaShieldAlt className="text-lg" />
             </Link>
           </div>
 
@@ -83,10 +84,11 @@ const Navbar = () => {
               </a>
               <Link 
                 to="/admin" 
-                className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition text-center"
+                className="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg transition text-center flex items-center justify-center gap-2"
                 onClick={() => setIsOpen(false)}
+                title="Administración"
               >
-                Admin
+                <FaShieldAlt className="text-lg" />
               </Link>
             </div>
           </div>

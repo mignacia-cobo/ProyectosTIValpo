@@ -178,18 +178,6 @@ const NewsDetail = () => {
                   {news.content}
                 </div>
               </div>
-
-              {/* Información adicional */}
-              {news.gallery && news.gallery.length > 0 && (
-                <div className="mt-12 pt-8 border-t border-gray-200">
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <FaImage className="text-purple-600" />
-                    <span>
-                      Esta noticia contiene {news.gallery.length} {news.gallery.length === 1 ? 'imagen' : 'imágenes'}
-                    </span>
-                  </div>
-                </div>
-              )}
             </div>
           </article>
 
