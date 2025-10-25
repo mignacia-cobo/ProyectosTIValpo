@@ -1,0 +1,64 @@
+services:
+  # Base de datos PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: proyectosti_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-proyectosti}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - proyectosti_network
+
+  # Backend API (Node.js + Express)
+  backend:
+    image: ${DOCKER_USERNAME:-mignaciacobo}/proyectosti-backend:latest
+    container_name: proyectosti_backend
+    restart: always
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      DB_NAME: ${DB_NAME:-proyectosti}
+      JWT_SECRET: ${JWT_SECRET:-change_this_secret_in_production}
+      SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-your_email@gmail.com}
+      SMTP_PASS: ${SMTP_PASS:-your_password}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@proyectostivalpo.com}
+    volumes:
+      - ./backend/uploads:/app/uploads
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - proyectosti_network
+
+  # Frontend (React + Vite)
+  frontend:
+    image: ${DOCKER_USERNAME:-mignaciacobo}/proyectosti-frontend:latest
+    container_name: proyectosti_frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - proyectosti_network
+
+volumes:
+  postgres_data:
+
+networks:
+  proyectosti_network:
+    driver: bridge
