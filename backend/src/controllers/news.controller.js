@@ -72,7 +72,7 @@ const createNews = async (req, res) => {
       return res.status(400).json({ error: 'Título y contenido son requeridos' });
     }
 
-    const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+    const image_url = req.files?.image?.[0] ? `/uploads/${req.files.image[0].filename}` : null;
 
     const result = await db.query(
       `INSERT INTO news (title, content, summary, image_url, published_date, active) 
@@ -86,6 +86,19 @@ const createNews = async (req, res) => {
         active !== undefined ? active : true
       ]
     );
+
+    const newsId = result.rows[0].id;
+
+    // Guardar imágenes de galería si existen
+    if (req.files?.gallery && req.files.gallery.length > 0) {
+      for (let i = 0; i < req.files.gallery.length; i++) {
+        const file = req.files.gallery[i];
+        await db.query(
+          'INSERT INTO news_images (news_id, image_url, order_index) VALUES ($1, $2, $3)',
+          [newsId, `/uploads/${file.filename}`, i]
+        );
+      }
+    }
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -109,14 +122,14 @@ const updateNews = async (req, res) => {
     let image_url = existingNews.rows[0].image_url;
 
     // Si hay nueva imagen, eliminar la anterior
-    if (req.file) {
+    if (req.files?.image?.[0]) {
       if (image_url) {
         const oldImagePath = path.join(__dirname, '../../', image_url);
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
       }
-      image_url = `/uploads/${req.file.filename}`;
+      image_url = `/uploads/${req.files.image[0].filename}`;
     }
 
     const result = await db.query(
@@ -126,6 +139,24 @@ const updateNews = async (req, res) => {
        WHERE id = $7 RETURNING *`,
       [title, content, summary, image_url, published_date, active, id]
     );
+
+    // Agregar nuevas imágenes de galería si existen
+    if (req.files?.gallery && req.files.gallery.length > 0) {
+      // Obtener el último order_index actual
+      const lastOrder = await db.query(
+        'SELECT COALESCE(MAX(order_index), -1) as max_order FROM news_images WHERE news_id = $1',
+        [id]
+      );
+      const startIndex = lastOrder.rows[0].max_order + 1;
+
+      for (let i = 0; i < req.files.gallery.length; i++) {
+        const file = req.files.gallery[i];
+        await db.query(
+          'INSERT INTO news_images (news_id, image_url, order_index) VALUES ($1, $2, $3)',
+          [id, `/uploads/${file.filename}`, startIndex + i]
+        );
+      }
+    }
 
     res.json(result.rows[0]);
   } catch (error) {

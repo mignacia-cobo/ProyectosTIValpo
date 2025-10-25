@@ -10,8 +10,14 @@ router.get('/:id', newsController.getNewsById);
 
 // Rutas protegidas (requieren autenticación)
 router.get('/admin/all', authenticateToken, newsController.getAllNewsAdmin);
-router.post('/', authenticateToken, upload.single('image'), newsController.createNews);
-router.put('/:id', authenticateToken, upload.single('image'), newsController.updateNews);
+router.post('/', authenticateToken, upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'gallery', maxCount: 10 }
+]), newsController.createNews);
+router.put('/:id', authenticateToken, upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'gallery', maxCount: 10 }
+]), newsController.updateNews);
 router.delete('/:id', authenticateToken, newsController.deleteNews);
 
 module.exports = router;

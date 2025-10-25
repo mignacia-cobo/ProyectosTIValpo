@@ -79,6 +79,19 @@ const NewsDetail = () => {
     return new Date(dateString).toLocaleDateString('es-ES', options);
   };
 
+  // Helper para construir URLs completas de imágenes
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return '';
+    // Si ya es una URL completa (http/https), retornarla tal cual
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return imageUrl;
+    }
+    // Si es una ruta relativa, agregar la URL base del servidor (sin /api porque /uploads está en la raíz)
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    const baseUrl = apiUrl.replace('/api', ''); // Remover /api para archivos estáticos
+    return `${baseUrl}${imageUrl}`;
+  };
+
   // Combinar imagen principal con galería
   const allImages = news.gallery && news.gallery.length > 0 
     ? news.gallery 
@@ -116,7 +129,7 @@ const NewsDetail = () => {
                   {allImages.map((img, index) => (
                     <div key={img.id || index} className="aspect-video bg-gray-800">
                       <img
-                        src={img.image_url}
+                        src={getImageUrl(img.image_url)}
                         alt={img.caption || news.title}
                         className="w-full h-full object-cover"
                       />

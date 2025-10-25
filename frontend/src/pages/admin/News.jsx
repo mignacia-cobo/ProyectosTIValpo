@@ -17,6 +17,8 @@ const News = () => {
     active: true
   });
   const [imageFile, setImageFile] = useState(null);
+  const [galleryFiles, setGalleryFiles] = useState([]); // Nuevas imágenes de galería
+  const [existingGallery, setExistingGallery] = useState([]); // Imágenes existentes
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -34,7 +36,7 @@ const News = () => {
     }
   };
 
-  const handleOpenModal = (news = null) => {
+  const handleOpenModal = async (news = null) => {
     if (news) {
       setEditingNews(news);
       setFormData({
@@ -44,6 +46,15 @@ const News = () => {
         published_date: new Date(news.published_date).toISOString().split('T')[0],
         active: news.active
       });
+      
+      // Cargar galería desde el servidor
+      try {
+        const newsDetail = await newsService.getById(news.id);
+        setExistingGallery(newsDetail.gallery || []);
+      } catch (error) {
+        console.error('Error al cargar galería:', error);
+        setExistingGallery([]);
+      }
     } else {
       setEditingNews(null);
       setFormData({
@@ -53,8 +64,10 @@ const News = () => {
         published_date: new Date().toISOString().split('T')[0],
         active: true
       });
+      setExistingGallery([]);
     }
     setImageFile(null);
+    setGalleryFiles([]);
     setShowModal(true);
   };
 
@@ -62,6 +75,8 @@ const News = () => {
     setShowModal(false);
     setEditingNews(null);
     setImageFile(null);
+    setGalleryFiles([]);
+    setExistingGallery([]);
   };
 
   const handleChange = (e) => {
@@ -75,6 +90,29 @@ const News = () => {
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setImageFile(e.target.files[0]);
+    }
+  };
+
+  const handleGalleryChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const filesArray = Array.from(e.target.files);
+      setGalleryFiles(prev => [...prev, ...filesArray]);
+    }
+  };
+
+  const removeGalleryFile = (index) => {
+    setGalleryFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingGalleryImage = async (imageId) => {
+    if (!confirm('¿Eliminar esta imagen de la galería?')) return;
+    
+    try {
+      // TODO: Implementar endpoint para eliminar imagen individual
+      setExistingGallery(prev => prev.filter(img => img.id !== imageId));
+      toast.success('Imagen eliminada');
+    } catch (error) {
+      toast.error('Error al eliminar imagen');
     }
   };
 
@@ -93,6 +131,11 @@ const News = () => {
       if (imageFile) {
         data.append('image', imageFile);
       }
+
+      // Agregar imágenes de galería
+      galleryFiles.forEach((file, index) => {
+        data.append('gallery', file);
+      });
 
       if (editingNews) {
         await newsService.update(editingNews.id, data);
@@ -294,7 +337,7 @@ const News = () => {
                 </div>
 
                 <div>
-                  <label className="label">Imagen</label>
+                  <label className="label">Imagen Principal</label>
                   <input
                     type="file"
                     accept="image/*"
@@ -302,7 +345,7 @@ const News = () => {
                     className="input-field"
                   />
                   <p className="text-sm text-gray-500 mt-1">
-                    Formatos permitidos: JPG, PNG, GIF, WebP (máx. 5MB)
+                    Imagen de portada (máx. 5MB)
                   </p>
                   {editingNews?.image_url && !imageFile && (
                     <div className="mt-2">
@@ -315,7 +358,76 @@ const News = () => {
                   )}
                 </div>
 
-                <div className="flex justify-end space-x-4 pt-4">
+                {/* Galería de Imágenes */}
+                <div className="border-t pt-4">
+                  <label className="label">Galería de Imágenes (Carrusel)</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleGalleryChange}
+                    className="input-field"
+                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    Selecciona múltiples imágenes para el carrusel (máx. 5MB c/u)
+                  </p>
+
+                  {/* Imágenes existentes */}
+                  {existingGallery.length > 0 && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Imágenes actuales:</p>
+                      <div className="grid grid-cols-4 gap-4">
+                        {existingGallery.map((img) => (
+                          <div key={img.id} className="relative group">
+                            <img
+                              src={getImageUrl(img.image_url)}
+                              alt={img.caption || 'Imagen galería'}
+                              className="h-24 w-full object-cover rounded"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeExistingGalleryImage(img.id)}
+                              className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <FaTrash size={12} />
+                            </button>
+                            {img.caption && (
+                              <p className="text-xs text-gray-600 mt-1 truncate">{img.caption}</p>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Nuevas imágenes seleccionadas */}
+                  {galleryFiles.length > 0 && (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium text-gray-700 mb-2">Nuevas imágenes:</p>
+                      <div className="grid grid-cols-4 gap-4">
+                        {galleryFiles.map((file, index) => (
+                          <div key={index} className="relative group">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`Nueva ${index + 1}`}
+                              className="h-24 w-full object-cover rounded"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeGalleryFile(index)}
+                              className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <FaTrash size={12} />
+                            </button>
+                            <p className="text-xs text-gray-600 mt-1 truncate">{file.name}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex justify-end space-x-4 pt-4 border-t">
                   <button
                     type="button"
                     onClick={handleCloseModal}
