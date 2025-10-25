@@ -19,5 +19,6 @@ router.put('/:id', authenticateToken, upload.fields([
   { name: 'gallery', maxCount: 10 }
 ]), newsController.updateNews);
 router.delete('/:id', authenticateToken, newsController.deleteNews);
+router.delete('/gallery/:imageId', authenticateToken, newsController.deleteGalleryImage);
 
 module.exports = router;

@@ -112,6 +112,11 @@ export const newsService = {
     const response = await api.delete(`/news/${id}`);
     return response.data;
   },
+
+  deleteGalleryImage: async (imageId) => {
+    const response = await api.delete(`/news/gallery/${imageId}`);
+    return response.data;
+  },
 };
 
 export const contactService = {

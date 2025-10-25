@@ -184,6 +184,15 @@ const deleteNews = async (req, res) => {
       }
     }
 
+    // Eliminar imágenes de galería asociadas
+    const galleryImages = await db.query('SELECT image_url FROM news_images WHERE news_id = $1', [id]);
+    for (const img of galleryImages.rows) {
+      const imgPath = path.join(__dirname, '../../', img.image_url);
+      if (fs.existsSync(imgPath)) {
+        fs.unlinkSync(imgPath);
+      }
+    }
+
     // Eliminar noticia
     await db.query('DELETE FROM news WHERE id = $1', [id]);
     
@@ -194,11 +203,44 @@ const deleteNews = async (req, res) => {
   }
 };
 
+// Eliminar imagen de galería
+const deleteGalleryImage = async (req, res) => {
+  try {
+    const { imageId } = req.params;
+
+    // Obtener la imagen para eliminar el archivo físico
+    const imageResult = await db.query('SELECT image_url FROM news_images WHERE id = $1', [imageId]);
+    
+    if (imageResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Imagen no encontrada' });
+    }
+
+    const imageUrl = imageResult.rows[0].image_url;
+
+    // Eliminar el archivo físico
+    if (imageUrl) {
+      const imagePath = path.join(__dirname, '../../', imageUrl);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+    }
+
+    // Eliminar el registro de la base de datos
+    await db.query('DELETE FROM news_images WHERE id = $1', [imageId]);
+
+    res.json({ message: 'Imagen eliminada exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar imagen de galería:', error);
+    res.status(500).json({ error: 'Error al eliminar imagen' });
+  }
+};
+
 module.exports = {
   getLatestNews,
   getAllNewsAdmin,
   getNewsById,
   createNews,
   updateNews,
-  deleteNews
+  deleteNews,
+  deleteGalleryImage
 };

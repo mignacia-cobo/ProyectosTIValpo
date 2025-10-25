@@ -108,7 +108,7 @@ const News = () => {
     if (!confirm('¿Eliminar esta imagen de la galería?')) return;
     
     try {
-      // TODO: Implementar endpoint para eliminar imagen individual
+      await newsService.deleteGalleryImage(imageId);
       setExistingGallery(prev => prev.filter(img => img.id !== imageId));
       toast.success('Imagen eliminada');
     } catch (error) {
