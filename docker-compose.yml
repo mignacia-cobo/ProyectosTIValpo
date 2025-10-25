@@ -18,7 +18,7 @@ services:
 
   # Backend API (Node.js + Express)
   backend:
-    image: ${DOCKER_USERNAME:-mignaciacobo}/proyectosti-backend:latest
+    image: ${DOCKER_USERNAME:-micobo}/proyectosti-backend:latest
     container_name: proyectosti_backend
     restart: always
     environment:
@@ -46,7 +46,7 @@ services:
 
   # Frontend (React + Vite)
   frontend:
-    image: ${DOCKER_USERNAME:-mignaciacobo}/proyectosti-frontend:latest
+    image: ${DOCKER_USERNAME:-micobo}/proyectosti-frontend:latest
     container_name: proyectosti_frontend
     restart: always
     ports:

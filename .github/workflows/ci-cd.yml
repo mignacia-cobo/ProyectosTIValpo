@@ -137,11 +137,12 @@ jobs:
         run: |
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            "sudo mkdir -p /var/www/proyectostivalpo && sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /var/www/proyectostivalpo"
+            "sudo mkdir -p /var/www/proyectostivalpo/backend && sudo chown -R ${{ secrets.SERVER_USER }}:${{ secrets.SERVER_USER }} /var/www/proyectostivalpo"
 
       - name: Crear archivo .env temporal
         run: |
           cat > .env.prod << EOF
+          DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}
           DB_USER=${{ secrets.DB_USER }}
           DB_PASSWORD=${{ secrets.DB_PASSWORD }}
           DB_NAME=${{ secrets.DB_NAME }}
@@ -163,6 +164,10 @@ jobs:
           sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no \
             .env.prod \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/proyectostivalpo/.env
+          
+          sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp -o StrictHostKeyChecking=no \
+            backend/init.sql \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/proyectostivalpo/backend/init.sql
 
       - name: Desplegar en el servidor
         uses: appleboy/ssh-action@v1.0.0
@@ -176,28 +181,41 @@ jobs:
             # Login a Docker Hub
             echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
             
-            # Detener contenedores actuales
-            docker compose down
+            # Detener contenedores actuales (si existen)
+            docker compose down || true
             
             # Eliminar imágenes antiguas
-            docker image prune -af
+            docker image prune -af || true
             
-            # Pull nuevas imágenes
+            # Pull nuevas imágenes desde Docker Hub
             docker compose pull
+            
+            # Verificar que las imágenes se descargaron
+            echo "=== Imágenes disponibles ==="
+            docker images | grep proyectosti
             
             # Iniciar contenedores con nuevas imágenes
             docker compose up -d
             
             # Esperar a que los servicios estén listos
-            sleep 10
+            echo "Esperando a que los servicios inicien..."
+            sleep 15
             
-            # Verificar estado
-            docker compose ps
+            # Verificar estado detallado
+            echo "=== Estado de los contenedores ==="
+            docker compose ps -a
             
-            # Ver logs recientes
-            docker compose logs --tail=50
+            # Ver logs si hay problemas
+            echo "=== Logs del backend ==="
+            docker compose logs backend --tail=20
             
-            echo "✅ Despliegue completado exitosamente"
+            echo "=== Logs del frontend ==="
+            docker compose logs frontend --tail=20
+            
+            echo "=== Logs de la base de datos ==="
+            docker compose logs db --tail=20
+            
+            echo "✅ Despliegue completado"
 
       - name: Verificar deployment
         uses: appleboy/ssh-action@v1.0.0
