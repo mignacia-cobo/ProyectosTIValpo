@@ -135,6 +135,21 @@ export const contactService = {
     return response.data;
   },
 
+  replyToMessage: async (id, replyMessage) => {
+    const response = await api.post(`/contact/messages/${id}/reply`, { replyMessage });
+    return response.data;
+  },
+
+  updateNotes: async (id, notes) => {
+    const response = await api.patch(`/contact/messages/${id}/notes`, { notes });
+    return response.data;
+  },
+
+  markAsChecked: async (id) => {
+    const response = await api.patch(`/contact/messages/${id}/check`);
+    return response.data;
+  },
+
   deleteMessage: async (id) => {
     const response = await api.delete(`/contact/messages/${id}`);
     return response.data;

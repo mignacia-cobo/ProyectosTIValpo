@@ -17,6 +17,9 @@ router.post('/', contactLimiter, contactController.sendContactMessage);
 // Rutas protegidas (requieren autenticación)
 router.get('/messages', authenticateToken, contactController.getAllMessages);
 router.patch('/messages/:id/read', authenticateToken, contactController.markAsRead);
+router.post('/messages/:id/reply', authenticateToken, contactController.replyToMessage);
+router.patch('/messages/:id/notes', authenticateToken, contactController.updateNotes);
+router.patch('/messages/:id/check', authenticateToken, contactController.markAsChecked);
 router.delete('/messages/:id', authenticateToken, contactController.deleteMessage);
 
 module.exports = router;
