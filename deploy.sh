@@ -65,10 +65,12 @@ sudo chown -R linuxuser:linuxuser $PROJECT_DIR
 echo -e "${YELLOW}[5/8] Configurando variables de entorno...${NC}"
 if [ ! -f "$PROJECT_DIR/.env" ]; then
     cat > $PROJECT_DIR/.env << EOF
-# Variables de producción
+# Configuración de la base de datos
 DB_USER=postgres
-DB_PASSWORD=$(openssl rand -base64 32)
-DB_NAME=proyectosti
+DB_PASSWORD=postgres
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=readme_to_recover
 
 JWT_SECRET=$(openssl rand -base64 64)
 

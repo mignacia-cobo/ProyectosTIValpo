@@ -37,7 +37,7 @@ Editar con tus datos reales:
 ```env
 DB_USER=postgres
 DB_PASSWORD=TU_PASSWORD_SEGURO_AQUI
-DB_NAME=proyectosti
+DB_NAME=readme_to_recover
 JWT_SECRET=TU_JWT_SECRET_LARGO_Y_ALEATORIO
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
