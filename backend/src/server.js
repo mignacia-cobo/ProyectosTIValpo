@@ -12,6 +12,7 @@ const contactRoutes = require('./routes/contact.routes');
 const usersRoutes = require('./routes/users.routes');
 const teamRoutes = require('./routes/team.routes');
 const settingsRoutes = require('./routes/settings.routes');
+const siteConfigRoutes = require('./routes/siteConfig.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -42,6 +43,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/team', teamRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/site-config', siteConfigRoutes);
 
 // Ruta de salud
 app.get('/api/health', (req, res) => {

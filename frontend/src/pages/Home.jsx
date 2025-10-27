@@ -7,7 +7,30 @@ import ProjectCard from '../components/ProjectCard';
 import NewsCard from '../components/NewsCard';
 import ContactForm from '../components/ContactForm';
 import Team from '../components/Team';
-import { projectService, newsService } from '../services';
+import { projectService, newsService, siteConfigService } from '../services';
+import {
+  Target, Lightbulb, Users, Zap, Award, TrendingUp, CheckCircle, Star,
+  Rocket, Heart, Shield, Code, Globe, Sparkles, Trophy, Briefcase,
+  BookOpen, GraduationCap, Cpu, Database, Lock, Workflow, Settings,
+  BarChart, LineChart, PieChart, Activity, Gauge, MessageCircle,
+  Phone, Mail, Calendar, Clock, DollarSign, CreditCard, ShoppingCart,
+  Package, Truck, MapPin, Home as HomeIcon, Building, Factory, Store
+} from 'lucide-react';
+
+// Mapa de iconos de lucide-react
+const ICON_MAP = {
+  Target, Lightbulb, Users, Zap, Award, TrendingUp, CheckCircle, Star,
+  Rocket, Heart, Shield, Code, Globe, Sparkles, Trophy, Briefcase,
+  BookOpen, GraduationCap, Cpu, Database, Lock, Workflow, Settings,
+  BarChart, LineChart, PieChart, Activity, Gauge, MessageCircle,
+  Phone, Mail, Calendar, Clock, DollarSign, CreditCard, ShoppingCart,
+  Package, Truck, MapPin, HomeIcon, Building, Factory, Store
+};
+
+// Función para obtener el componente del icono por nombre
+const getIconComponent = (iconName) => {
+  return ICON_MAP[iconName] || Target;
+};
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
@@ -17,6 +40,27 @@ const Home = () => {
   const featuresRef = useRef(null);
   const projectsRef = useRef(null);
   const newsRef = useRef(null);
+  
+  // Estados para configuración del sitio
+  const [heroConfig, setHeroConfig] = useState({
+    title: 'Proyectos de Innovación Tecnológica',
+    subtitle: 'Impulsando el desarrollo tecnológico en Valparaíso',
+    description: 'Desarrollamos soluciones innovadoras que conectan la academia con la industria',
+    buttonText: 'Conocer Proyectos',
+    buttonLink: '/projects'
+  });
+  const [statsConfig, setStatsConfig] = useState({ stats: [] });
+  const [featuresConfig, setFeaturesConfig] = useState({ 
+    title: '¿Por qué Elegirnos?',
+    subtitle: 'Características que nos distinguen',
+    features: [] 
+  });
+  const [technologiesConfig, setTechnologiesConfig] = useState({ items: ['React', 'Node.js', 'PostgreSQL', 'Docker'] });
+  const [contactInfoConfig, setContactInfoConfig] = useState({
+    email: { icon: 'Mail', title: 'Email', value: 'contacto@proyectostivalpo.com', color: 'primary' },
+    schedule: { icon: 'Clock', title: 'Horario', value: '24/7 Disponible', color: 'purple' },
+    location: { icon: 'MapPin', title: 'Ubicación', value: 'Valparaíso, Chile', color: 'pink' }
+  });
 
   useEffect(() => {
     loadData();
@@ -61,12 +105,23 @@ const Home = () => {
 
   const loadData = async () => {
     try {
-      const [projectsData, newsData] = await Promise.all([
+      const [projectsData, newsData, siteConfigData] = await Promise.all([
         projectService.getAll(),
-        newsService.getLatest(3)
+        newsService.getLatest(3),
+        siteConfigService.getAll()
       ]);
       setProjects(projectsData);
       setNews(newsData);
+      
+      // Cargar configuración del sitio
+      if (siteConfigData.success) {
+        const { data } = siteConfigData;
+        if (data.hero) setHeroConfig(data.hero);
+        if (data.stats) setStatsConfig(data.stats);
+        if (data.features) setFeaturesConfig(data.features);
+        if (data.technologies) setTechnologiesConfig(data.technologies);
+        if (data.contactInfo) setContactInfoConfig(data.contactInfo);
+      }
     } catch (error) {
       console.error('❌ Error al cargar datos:', error);
     } finally {
@@ -105,25 +160,25 @@ const Home = () => {
 
             {/* Título principal mejorado */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 animate-fade-in-up leading-tight">
-              <span className="block mb-2">Proyectos TI</span>
+              <span className="block mb-2">{heroConfig.title}</span>
               <span className="block bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent drop-shadow-lg">
-                Valparaíso
+                {heroConfig.subtitle}
               </span>
             </h1>
 
             {/* Subtítulo mejorado */}
             <p className="text-xl md:text-2xl mb-8 text-primary-50 max-w-3xl mx-auto animate-fade-in-up animation-delay-200 leading-relaxed">
-              Desarrollamos soluciones tecnológicas innovadoras que transforman ideas en realidad digital
+              {heroConfig.description}
             </p>
 
             {/* Botones de acción mejorados */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-300 mb-12">
               <a 
-                href="#proyectos" 
+                href={heroConfig.buttonLink || "#proyectos"}
                 className="group inline-flex items-center gap-3 bg-white text-primary-600 px-8 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all shadow-2xl hover-lift transform hover:scale-105"
               >
                 <FaRocket className="text-xl group-hover:rotate-12 transition-transform" />
-                Ver Proyectos
+                {heroConfig.buttonText}
               </a>
               <a 
                 href="#contacto" 
@@ -136,11 +191,19 @@ const Home = () => {
 
             {/* Tecnologías destacadas */}
             <div className="flex flex-wrap justify-center gap-4 animate-fade-in-up animation-delay-400">
-              {['React', 'Node.js', 'PostgreSQL', 'Docker'].map((tech, index) => (
-                <span key={tech} className="px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg text-sm font-medium">
-                  {tech}
-                </span>
-              ))}
+              {technologiesConfig.items && technologiesConfig.items.length > 0 ? (
+                technologiesConfig.items.map((tech, index) => (
+                  <span key={index} className="px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg text-sm font-medium">
+                    {tech}
+                  </span>
+                ))
+              ) : (
+                ['React', 'Node.js', 'PostgreSQL', 'Docker'].map((tech, index) => (
+                  <span key={index} className="px-4 py-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg text-sm font-medium">
+                    {tech}
+                  </span>
+                ))
+              )}
             </div>
 
             {/* Indicador de scroll animado */}
@@ -171,49 +234,78 @@ const Home = () => {
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {/* Stat 1 */}
-            <div className="text-center card-reveal">
-              <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
-                <FaRocket className="text-4xl text-primary-600" />
-              </div>
-              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                <CountUp end={projects.length || 5} duration={2.5} />+
-              </div>
-              <div className="text-gray-700 font-semibold text-lg">Proyectos Activos</div>
-            </div>
+            {statsConfig.stats && statsConfig.stats.length > 0 ? (
+              statsConfig.stats.map((stat, index) => {
+                const IconComponent = getIconComponent(stat.icon || 'TrendingUp');
+                const colors = [
+                  'text-primary-600',
+                  'text-purple-600',
+                  'text-blue-600',
+                  'text-yellow-500'
+                ];
+                const gradients = [
+                  'from-primary-600 to-purple-600',
+                  'from-purple-600 to-pink-600',
+                  'from-blue-600 to-cyan-600',
+                  'from-yellow-500 to-orange-500'
+                ];
+                
+                return (
+                  <div key={stat.id} className={`text-center card-reveal ${index > 0 ? `animation-delay-${index * 100}` : ''}`}>
+                    <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                      <IconComponent className={`w-14 h-14 ${colors[index % colors.length]}`} strokeWidth={2.5} />
+                    </div>
+                    <div className={`text-5xl md:text-6xl font-bold bg-gradient-to-r ${gradients[index % gradients.length]} bg-clip-text text-transparent mb-2`}>
+                      {stat.value}
+                    </div>
+                    <div className="text-gray-700 font-semibold text-lg">{stat.label}</div>
+                  </div>
+                );
+              })
+            ) : (
+              <>
+                {/* Fallback stats si no hay configuración */}
+                <div className="text-center card-reveal">
+                  <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                    <FaRocket className="text-4xl text-primary-600" />
+                  </div>
+                  <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                    <CountUp end={projects.length || 5} duration={2.5} />+
+                  </div>
+                  <div className="text-gray-700 font-semibold text-lg">Proyectos Activos</div>
+                </div>
 
-            {/* Stat 2 */}
-            <div className="text-center card-reveal animation-delay-100">
-              <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
-                <FaUsers className="text-4xl text-purple-600" />
-              </div>
-              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
-                <CountUp end={150} duration={2.5} />+
-              </div>
-              <div className="text-gray-700 font-semibold text-lg">Usuarios Activos</div>
-            </div>
+                <div className="text-center card-reveal animation-delay-100">
+                  <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                    <FaUsers className="text-4xl text-purple-600" />
+                  </div>
+                  <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+                    <CountUp end={150} duration={2.5} />+
+                  </div>
+                  <div className="text-gray-700 font-semibold text-lg">Usuarios Activos</div>
+                </div>
 
-            {/* Stat 3 */}
-            <div className="text-center card-reveal animation-delay-200">
-              <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
-                <FaAward className="text-4xl text-blue-600" />
-              </div>
-              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
-                <CountUp end={99} duration={2.5} />%
-              </div>
-              <div className="text-gray-700 font-semibold text-lg">Satisfacción</div>
-            </div>
+                <div className="text-center card-reveal animation-delay-200">
+                  <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                    <FaAward className="text-4xl text-blue-600" />
+                  </div>
+                  <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+                    <CountUp end={99} duration={2.5} />%
+                  </div>
+                  <div className="text-gray-700 font-semibold text-lg">Satisfacción</div>
+                </div>
 
-            {/* Stat 4 */}
-            <div className="text-center card-reveal animation-delay-300">
-              <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
-                <FaStar className="text-4xl text-yellow-500" />
-              </div>
-              <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent mb-2">
-                <CountUp end={24} duration={2.5} />/7
-              </div>
-              <div className="text-gray-700 font-semibold text-lg">Disponibilidad</div>
-            </div>
+                <div className="text-center card-reveal animation-delay-300">
+                  <div className="inline-flex p-4 bg-white rounded-2xl shadow-lg mb-4">
+                    <FaStar className="text-4xl text-yellow-500" />
+                  </div>
+                  <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent mb-2">
+                    <CountUp end={24} duration={2.5} />/7
+                  </div>
+                  <div className="text-gray-700 font-semibold text-lg">Disponibilidad</div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -223,86 +315,78 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 card-reveal">
-              ¿Por qué elegirnos?
+              {featuresConfig.title}
             </h2>
             <p className="text-xl text-gray-600 card-reveal animation-delay-100">
-              Nos comprometemos con la excelencia en cada proyecto
+              {featuresConfig.subtitle}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="card-reveal text-center p-8 bg-white rounded-2xl shadow-lg hover-lift">
-              <div className="inline-flex p-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-6 transform transition-transform hover:scale-110">
-                <FaRocket className="text-white text-5xl" />
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-900">Innovación Constante</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Implementamos las últimas tecnologías y mejores prácticas para crear soluciones modernas, escalables y eficientes.
-              </p>
+          {featuresConfig.features && featuresConfig.features.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuresConfig.features.map((feature, index) => {
+                const IconComponent = getIconComponent(feature.icon);
+                const gradients = [
+                  'from-blue-500 to-blue-600',
+                  'from-purple-500 to-purple-600',
+                  'from-pink-500 to-pink-600',
+                  'from-green-500 to-green-600',
+                  'from-yellow-500 to-yellow-600',
+                  'from-red-500 to-red-600',
+                ];
+                
+                return (
+                  <div 
+                    key={feature.id} 
+                    className={`card-reveal ${index > 0 ? `animation-delay-${Math.min(index * 100, 600)}` : ''} text-center p-8 bg-white rounded-2xl shadow-lg hover-lift`}
+                  >
+                    <div className={`inline-flex p-6 bg-gradient-to-br ${gradients[index % gradients.length]} rounded-2xl mb-6 transform transition-transform hover:scale-110`}>
+                      <IconComponent className="text-white w-16 h-16" strokeWidth={2.5} />
+                    </div>
+                    <h3 className="text-2xl font-bold mb-4 text-gray-900">{feature.title}</h3>
+                    <p className="text-gray-600 leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </div>
+                );
+              })}
             </div>
-
-            {/* Feature 2 */}
-            <div className="card-reveal animation-delay-200 text-center p-8 bg-white rounded-2xl shadow-lg hover-lift">
-              <div className="inline-flex p-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl mb-6 transform transition-transform hover:scale-110">
-                <FaLightbulb className="text-white text-5xl" />
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-900">Soluciones Inteligentes</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Desarrollamos sistemas que optimizan procesos, mejoran la productividad y generan valor real para tu negocio.
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="card-reveal animation-delay-300 text-center p-8 bg-white rounded-2xl shadow-lg hover-lift">
-              <div className="inline-flex p-6 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl mb-6 transform transition-transform hover:scale-110">
-                <FaCogs className="text-white text-5xl" />
-              </div>
-              <h3 className="text-2xl font-bold mb-4 text-gray-900">Mantenimiento Continuo</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Brindamos soporte y actualizaciones constantes para garantizar el óptimo funcionamiento de todos nuestros sistemas.
-              </p>
-            </div>
-          </div>
-
-          {/* Características adicionales */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="card-reveal animation-delay-400 flex items-start gap-4 p-6 bg-white rounded-xl shadow-md">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <FaCode className="text-blue-600 text-xl" />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Feature 1 - Fallback */}
+              <div className="card-reveal text-center p-8 bg-white rounded-2xl shadow-lg hover-lift">
+                <div className="inline-flex p-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-6 transform transition-transform hover:scale-110">
+                  <FaRocket className="text-white text-5xl" />
                 </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">Innovación Constante</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Implementamos las últimas tecnologías y mejores prácticas para crear soluciones modernas, escalables y eficientes.
+                </p>
               </div>
-              <div>
-                <h4 className="font-bold text-gray-900 mb-2">Código de Calidad</h4>
-                <p className="text-gray-600 text-sm">Seguimos estándares de industria y mejores prácticas de desarrollo.</p>
-              </div>
-            </div>
 
-            <div className="card-reveal animation-delay-500 flex items-start gap-4 p-6 bg-white rounded-xl shadow-md">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <FaUsers className="text-purple-600 text-xl" />
+              {/* Feature 2 - Fallback */}
+              <div className="card-reveal animation-delay-200 text-center p-8 bg-white rounded-2xl shadow-lg hover-lift">
+                <div className="inline-flex p-6 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl mb-6 transform transition-transform hover:scale-110">
+                  <FaLightbulb className="text-white text-5xl" />
                 </div>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">Soluciones Inteligentes</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Desarrollamos sistemas que optimizan procesos, mejoran la productividad y generan valor real para tu negocio.
+                </p>
               </div>
-              <div>
-                <h4 className="font-bold text-gray-900 mb-2">Trabajo en Equipo</h4>
-                <p className="text-gray-600 text-sm">Colaboración efectiva para entregar resultados excepcionales.</p>
-              </div>
-            </div>
 
-            <div className="card-reveal animation-delay-600 flex items-start gap-4 p-6 bg-white rounded-xl shadow-md">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-pink-100 rounded-lg flex items-center justify-center">
-                  <FaTrophy className="text-pink-600 text-xl" />
+              {/* Feature 3 - Fallback */}
+              <div className="card-reveal animation-delay-300 text-center p-8 bg-white rounded-2xl shadow-lg hover-lift">
+                <div className="inline-flex p-6 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl mb-6 transform transition-transform hover:scale-110">
+                  <FaCogs className="text-white text-5xl" />
                 </div>
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-900 mb-2">Resultados Comprobados</h4>
-                <p className="text-gray-600 text-sm">Proyectos exitosos respaldados por usuarios satisfechos.</p>
+                <h3 className="text-2xl font-bold mb-4 text-gray-900">Mantenimiento Continuo</h3>
+                <p className="text-gray-600 leading-relaxed">
+                  Brindamos soporte y actualizaciones constantes para garantizar el óptimo funcionamiento de todos nuestros sistemas.
+                </p>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -458,35 +542,40 @@ const Home = () => {
 
           {/* Información de contacto adicional */}
           <div className="card-reveal animation-delay-400 mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            {/* Email */}
             <div className="p-6">
-              <div className="inline-flex p-4 bg-primary-100 rounded-full mb-4">
-                <svg className="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
+              <div className={`inline-flex p-4 bg-${contactInfoConfig.email.color}-100 rounded-full mb-4`}>
+                {(() => {
+                  const IconComponent = getIconComponent(contactInfoConfig.email.icon);
+                  return <IconComponent className={`w-6 h-6 text-${contactInfoConfig.email.color}-600`} strokeWidth={2} />;
+                })()}
               </div>
-              <h4 className="font-bold text-gray-900 mb-2">Email</h4>
-              <p className="text-gray-600">contacto@proyectostivalpo.com</p>
+              <h4 className="font-bold text-gray-900 mb-2">{contactInfoConfig.email.title}</h4>
+              <p className="text-gray-600">{contactInfoConfig.email.value}</p>
             </div>
 
+            {/* Horario */}
             <div className="p-6">
-              <div className="inline-flex p-4 bg-purple-100 rounded-full mb-4">
-                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+              <div className={`inline-flex p-4 bg-${contactInfoConfig.schedule.color}-100 rounded-full mb-4`}>
+                {(() => {
+                  const IconComponent = getIconComponent(contactInfoConfig.schedule.icon);
+                  return <IconComponent className={`w-6 h-6 text-${contactInfoConfig.schedule.color}-600`} strokeWidth={2} />;
+                })()}
               </div>
-              <h4 className="font-bold text-gray-900 mb-2">Horario</h4>
-              <p className="text-gray-600">24/7 Disponible</p>
+              <h4 className="font-bold text-gray-900 mb-2">{contactInfoConfig.schedule.title}</h4>
+              <p className="text-gray-600">{contactInfoConfig.schedule.value}</p>
             </div>
 
+            {/* Ubicación */}
             <div className="p-6">
-              <div className="inline-flex p-4 bg-pink-100 rounded-full mb-4">
-                <svg className="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
+              <div className={`inline-flex p-4 bg-${contactInfoConfig.location.color}-100 rounded-full mb-4`}>
+                {(() => {
+                  const IconComponent = getIconComponent(contactInfoConfig.location.icon);
+                  return <IconComponent className={`w-6 h-6 text-${contactInfoConfig.location.color}-600`} strokeWidth={2} />;
+                })()}
               </div>
-              <h4 className="font-bold text-gray-900 mb-2">Ubicación</h4>
-              <p className="text-gray-600">Valparaíso, Chile</p>
+              <h4 className="font-bold text-gray-900 mb-2">{contactInfoConfig.location.title}</h4>
+              <p className="text-gray-600">{contactInfoConfig.location.value}</p>
             </div>
           </div>
         </div>

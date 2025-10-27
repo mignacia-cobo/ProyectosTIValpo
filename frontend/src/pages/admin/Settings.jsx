@@ -8,11 +8,6 @@ const Settings = () => {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    site_name: '',
-    site_description: '',
-    email: '',
-    phone: '',
-    address: '',
     github_url: '',
     linkedin_url: '',
     facebook_url: '',
@@ -28,11 +23,6 @@ const Settings = () => {
     try {
       const data = await settingsService.get();
       setFormData({
-        site_name: data.site_name || '',
-        site_description: data.site_description || '',
-        email: data.email || '',
-        phone: data.phone || '',
-        address: data.address || '',
         github_url: data.github_url || '',
         linkedin_url: data.linkedin_url || '',
         facebook_url: data.facebook_url || '',
@@ -71,8 +61,8 @@ const Settings = () => {
   return (
     <AdminLayout>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Configuración del Sitio</h1>
-        <p className="text-gray-600">Administra la información general que se muestra en el footer y otras secciones del sitio</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Redes Sociales</h1>
+        <p className="text-gray-600">Administra los enlaces a las redes sociales que se muestran en el footer</p>
       </div>
 
       {loading ? (
@@ -81,98 +71,11 @@ const Settings = () => {
         </div>
       ) : (
         <div className="card p-8">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Información General */}
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <FaGlobe className="text-primary-600" />
-                Información General
-              </h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="label">Nombre del Sitio</label>
-                  <input
-                    type="text"
-                    name="site_name"
-                    value={formData.site_name}
-                    onChange={handleChange}
-                    required
-                    className="input-field"
-                    placeholder="Proyectos TI Valpo"
-                  />
-                </div>
-
-                <div>
-                  <label className="label">Descripción del Sitio</label>
-                  <textarea
-                    name="site_description"
-                    value={formData.site_description}
-                    onChange={handleChange}
-                    rows={4}
-                    className="input-field"
-                    placeholder="Descripción que aparecerá en el footer..."
-                  />
-                  <p className="text-sm text-gray-500 mt-1">
-                    Esta descripción se mostrará en el footer del sitio
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Información de Contacto */}
-            <div className="border-t pt-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Información de Contacto</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="label flex items-center gap-2">
-                    <FaEnvelope className="text-gray-400" />
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="input-field"
-                    placeholder="info@proyectostivalpo.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="label flex items-center gap-2">
-                    <FaPhone className="text-gray-400" />
-                    Teléfono
-                  </label>
-                  <input
-                    type="text"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="input-field"
-                    placeholder="+56 9 1234 5678"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="label flex items-center gap-2">
-                    <FaMapMarkerAlt className="text-gray-400" />
-                    Dirección
-                  </label>
-                  <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    className="input-field"
-                    placeholder="Valparaíso, Chile"
-                  />
-                </div>
-              </div>
-            </div>
-
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Redes Sociales */}
-            <div className="border-t pt-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Redes Sociales</h2>
+            <div>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Enlaces a Redes Sociales</h2>
+              <p className="text-sm text-gray-600 mb-6">Los enlaces vacíos no se mostrarán en el footer</p>
               <div className="space-y-4">
                 <div>
                   <label className="label flex items-center gap-2">
@@ -259,7 +162,7 @@ const Settings = () => {
                 disabled={submitting}
               >
                 <FaSave />
-                {submitting ? 'Guardando...' : 'Guardar Configuración'}
+                {submitting ? 'Guardando...' : 'Guardar Redes Sociales'}
               </button>
             </div>
           </form>

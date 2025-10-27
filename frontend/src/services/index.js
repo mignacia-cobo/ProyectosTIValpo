@@ -230,3 +230,24 @@ export const settingsService = {
     return response.data;
   },
 };
+
+export const siteConfigService = {
+  // Obtener toda la configuración del sitio
+  getAll: async () => {
+    const response = await api.get('/site-config/all');
+    return response.data;
+  },
+
+  // Obtener configuración por sección
+  getBySection: async (section) => {
+    const response = await api.get(`/site-config/${section}`);
+    return response.data;
+  },
+
+  // Actualizar configuración de una sección
+  update: async (section, config) => {
+    const response = await api.patch(`/site-config/${section}`, { config });
+    return response.data;
+  },
+};
+
