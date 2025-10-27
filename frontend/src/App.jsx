@@ -5,6 +5,9 @@ import 'react-toastify/dist/ReactToastify.css';
 // Páginas públicas
 import Home from './pages/Home';
 import NewsDetail from './pages/NewsDetail';
+import Forum from './pages/Forum';
+import ForumPost from './pages/ForumPost';
+import NewForumPost from './pages/NewForumPost';
 
 // Páginas de administración
 import Login from './pages/admin/Login';
@@ -16,6 +19,7 @@ import UsersAdmin from './pages/admin/Users';
 import TeamAdmin from './pages/admin/Team';
 import SettingsAdmin from './pages/admin/Settings';
 import SiteConfigAdmin from './pages/admin/SiteConfig';
+import ForumAdmin from './pages/admin/Forum';
 
 // Componente de ruta protegida
 import ProtectedRoute from './components/ProtectedRoute';
@@ -28,6 +32,9 @@ function App() {
           {/* Rutas públicas */}
           <Route path="/" element={<Home />} />
           <Route path="/news/:id" element={<NewsDetail />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/post/:id" element={<ForumPost />} />
+          <Route path="/forum/new" element={<NewForumPost />} />
           
           {/* Rutas de administración */}
           <Route path="/admin/login" element={<Login />} />
@@ -92,6 +99,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <SiteConfigAdmin />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/admin/forum" 
+            element={
+              <ProtectedRoute>
+                <ForumAdmin />
               </ProtectedRoute>
             } 
           />

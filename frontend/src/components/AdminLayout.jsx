@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { authService } from '../services';
-import { FaHome, FaNewspaper, FaEnvelope, FaSignOutAlt, FaBars, FaTimes, FaProjectDiagram, FaUsers, FaUserFriends, FaCog, FaPalette } from 'react-icons/fa';
+import { FaHome, FaNewspaper, FaEnvelope, FaSignOutAlt, FaBars, FaTimes, FaProjectDiagram, FaUsers, FaUserFriends, FaCog, FaPalette, FaComments } from 'react-icons/fa';
 import { useState } from 'react';
 
 const AdminLayout = ({ children }) => {
@@ -20,6 +20,7 @@ const AdminLayout = ({ children }) => {
     { path: '/admin/news', icon: FaNewspaper, label: 'Noticias' },
     { path: '/admin/team', icon: FaUserFriends, label: 'Equipo' },
     { path: '/admin/messages', icon: FaEnvelope, label: 'Mensajes' },
+    { path: '/admin/forum', icon: FaComments, label: 'Foro' },
     { path: '/admin/users', icon: FaUsers, label: 'Usuarios' },
     { path: '/admin/site-config', icon: FaPalette, label: 'Contenido del Sitio' },
     { path: '/admin/settings', icon: FaCog, label: 'Redes Sociales' },

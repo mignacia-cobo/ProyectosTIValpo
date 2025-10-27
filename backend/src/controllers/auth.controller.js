@@ -32,7 +32,7 @@ const login = async (req, res) => {
 
     // Generar token JWT
     const token = jwt.sign(
-      { id: user.id, email: user.email, name: user.name },
+      { id: user.id, email: user.email, name: user.name, role: user.role || 'admin' },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
@@ -42,7 +42,8 @@ const login = async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name
+        name: user.name,
+        role: user.role || 'admin'
       }
     });
   } catch (error) {

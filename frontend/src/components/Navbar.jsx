@@ -27,6 +27,9 @@ const Navbar = () => {
             <a href="#noticias" className="text-gray-700 hover:text-primary-600 transition">
               Noticias
             </a>
+            <Link to="/forum" className="text-gray-700 hover:text-primary-600 transition">
+              Foro
+            </Link>
             <a href="#contacto" className="text-gray-700 hover:text-primary-600 transition">
               Contacto
             </a>
@@ -75,6 +78,13 @@ const Navbar = () => {
               >
                 Noticias
               </a>
+              <Link 
+                to="/forum" 
+                className="text-gray-700 hover:text-primary-600 transition"
+                onClick={() => setIsOpen(false)}
+              >
+                Foro
+              </Link>
               <a 
                 href="#contacto" 
                 className="text-gray-700 hover:text-primary-600 transition"
